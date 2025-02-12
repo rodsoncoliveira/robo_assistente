@@ -1,0 +1,11 @@
+-- SQLite
+CREATE TABLE url (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+url TEXT NOT NULL,
+btn_acesso TEXT NULL,
+usuario TEXT NOT NULL,
+conteudo_usuario TEXT NOT NULL,
+senha TEXT NOT NULL,
+conteudo_senha TEXT NOT NULL,
+btn_login TEXT NOT NULL
+)
