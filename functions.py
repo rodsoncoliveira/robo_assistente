@@ -26,9 +26,10 @@ def get_ini():
     user_folder = os.path.expanduser("~")
     # Define o caminho do arquivo dentro da pasta do usuário
     file_path = os.path.join(user_folder, "robots.ini")
-    with open(file_path, 'r') as f:
-        file = f.read()
-    return file
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            file = f.read()
+        return file
 
 # Função para pegar o caminho do banco de dados
 def get_saved_path():

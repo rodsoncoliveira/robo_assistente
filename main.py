@@ -2,7 +2,8 @@ import functions as fc, streamlit as st, pandas as pd
 
 # path do sistema
 path_sys = fc.get_ini()
-path_download = path_sys + '\Relatorios'
+if path_sys:
+    path_download = path_sys + '\Relatorios'
 
 # Interface do Streamlit
 
@@ -251,17 +252,28 @@ if 'usuario_logado' in st.session_state:
 
 
 else:
-    menu = st.selectbox('Escolha uma opção:', ['Login','Registrar'])
-    if menu == 'Login':
-        usuario = st.text_input('Usuário')
-        senha = st.text_input('Senha', type='password')
-        if st.button('Entrar'):
-            if fc.verificar_login(usuario,senha):
-                st.session_state['usuario_logado'] = usuario
-                st.rerun()
-            else:
-                st.error('Credenciais Inválidas!!')
-    elif menu == 'Registrar':
+    if path_sys:
+        menu = st.selectbox('Escolha uma opção:', ['Login','Registrar'])
+        if menu == 'Login':
+            usuario = st.text_input('Usuário')
+            senha = st.text_input('Senha', type='password')
+            if st.button('Entrar'):
+                if fc.verificar_login(usuario,senha):
+                    st.session_state['usuario_logado'] = usuario
+                    st.rerun()
+                else:
+                    st.error('Credenciais Inválidas!!')
+        elif menu == 'Registrar':
+            usuario = st.text_input('Usuário')
+            senha = st.text_input('Senha', type='password')
+            confirmar_senha = st.text_input('Confirmar Senha', type='password')
+            if st.button('Registrar'):
+                if senha == confirmar_senha:
+                    fc.registrar_usuario(usuario,senha)
+                    st.success('Usuário Registrado com Sucesso!!')
+                else:
+                    st.error('As informações de senha não correspondem!')
+    else:
         usuario = st.text_input('Usuário')
         senha = st.text_input('Senha', type='password')
         confirmar_senha = st.text_input('Confirmar Senha', type='password')
