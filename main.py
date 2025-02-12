@@ -1,9 +1,9 @@
 import functions as fc, streamlit as st, pandas as pd
 
 # path do sistema
-path_sys = fc.get_ini()
-if path_sys:
-    path_download = path_sys + '\Relatorios'
+# path_sys = fc.get_ini()
+# if path_sys:
+#     path_download = path_sys + '\Relatorios'
 
 # Interface do Streamlit
 
@@ -75,7 +75,7 @@ if 'usuario_logado' in st.session_state:
         url = st.selectbox('Selecione o Sistema de origem',fc.lista_relatorio())
     with col5:
         if st.button('Executar Robô'): # EXECUTA EXTRAÇÃO DO RELATORIO
-            driver = fc.get_url(path_download)
+            driver = fc.get_url('Relatorios')
             driver.get(url)
 
     # Adiciona a linha branca separando o cabeçalho do conteúdo
@@ -252,45 +252,35 @@ if 'usuario_logado' in st.session_state:
 
 
 else:
-    if path_sys:
-        menu = st.selectbox('Escolha uma opção:', ['Login','Registrar'])
-        if menu == 'Login':
-            usuario = st.text_input('Usuário')
-            senha = st.text_input('Senha', type='password')
-            if st.button('Entrar'):
-                if fc.verificar_login(usuario,senha):
-                    st.session_state['usuario_logado'] = usuario
-                    st.rerun()
-                else:
-                    st.error('Credenciais Inválidas!!')
-        elif menu == 'Registrar':
-            usuario = st.text_input('Usuário')
-            senha = st.text_input('Senha', type='password')
-            confirmar_senha = st.text_input('Confirmar Senha', type='password')
-            if st.button('Registrar'):
-                if senha == confirmar_senha:
-                    fc.registrar_usuario(usuario,senha)
-                    st.success('Usuário Registrado com Sucesso!!')
-                else:
-                    st.error('As informações de senha não correspondem!')
-    else:
-        #col1, col2 = st.columns([3,1])
-        #with col1:
-        sys_path = st.text_input('Informe o caminho para o sistema:')
-        #with col2:
-        #    if st.button('Criar'):
-        #        fc.setup_database()
-        #        st.success('Base criada com Sucesso!')
-        st.text('Registro de Usuário')
+    menu = st.selectbox('Escolha uma opção:', ['Login','Registrar'])
+    if menu == 'Login':
+        usuario = st.text_input('Usuário')
+        senha = st.text_input('Senha', type='password')
+        if st.button('Entrar'):
+            if fc.verificar_login(usuario,senha):
+                st.session_state['usuario_logado'] = usuario
+                st.rerun()
+            else:
+                st.error('Credenciais Inválidas!!')
+    elif menu == 'Registrar':
         usuario = st.text_input('Usuário')
         senha = st.text_input('Senha', type='password')
         confirmar_senha = st.text_input('Confirmar Senha', type='password')
         if st.button('Registrar'):
             if senha == confirmar_senha:
-                #fc.create_ini()
-                fc.setup_database(sys_path)
                 fc.registrar_usuario(usuario,senha)
-                st.success('Dados Carregados com Sucesso!!')
-                st.rerun()
+                st.success('Usuário Registrado com Sucesso!!')
             else:
                 st.error('As informações de senha não correspondem!')
+    # else:
+    #     st.text('Registro de Usuário')
+    #     usuario = st.text_input('Usuário')
+    #     senha = st.text_input('Senha', type='password')
+    #     confirmar_senha = st.text_input('Confirmar Senha', type='password')
+    #     if st.button('Registrar'):
+    #         if senha == confirmar_senha:
+    #             fc.registrar_usuario(usuario,senha)
+    #             st.success('Usuário Carregados com Sucesso!!')
+    #             st.rerun()
+    #         else:
+    #             st.error('As informações de senha não correspondem!')

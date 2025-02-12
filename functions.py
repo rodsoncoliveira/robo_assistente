@@ -8,83 +8,83 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# Função que cria o arquivo de inicialização
-def create_ini(sys_file):
-    # Obtém o caminho da pasta do usuário
-    user_folder = os.path.expanduser("~")
+# # Função que cria o arquivo de inicialização
+# def create_ini(sys_file):
+#     # Obtém o caminho da pasta do usuário
+#     user_folder = os.path.expanduser("~")
 
-    # Define o caminho do arquivo dentro da pasta do usuário
-    file_path = os.path.join(user_folder, "robots.ini")
+#     # Define o caminho do arquivo dentro da pasta do usuário
+#     file_path = os.path.join(user_folder, "robots.ini")
 
-    # Cria e escreve no arquivo
-    with open(file_path, "w") as f:
-        f.write(sys_file)
+#     # Cria e escreve no arquivo
+#     with open(file_path, "w") as f:
+#         f.write(sys_file)
 
-# Função que verifica se o arquivo ini já foi criado
-def get_ini():
-    # Obtém o caminho da pasta do usuário
-    user_folder = os.path.expanduser("~")
-    # Define o caminho do arquivo dentro da pasta do usuário
-    file_path = os.path.join(user_folder, "robots.ini")
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as f:
-            file = f.read()
-        return file
+# # Função que verifica se o arquivo ini já foi criado
+# def get_ini():
+#     # Obtém o caminho da pasta do usuário
+#     user_folder = os.path.expanduser("~")
+#     # Define o caminho do arquivo dentro da pasta do usuário
+#     file_path = os.path.join(user_folder, "robots.ini")
+#     if os.path.exists(file_path):
+#         with open(file_path, 'r') as f:
+#             file = f.read()
+#         return file
 
-# Função para pegar o caminho do banco de dados
-def get_saved_path(conn):
-    cursor = conn.cursor()
-    cursor.execute ('SELECT caminho FROM configuracoes LIMIT 1')
-    row = cursor.fetchone()
-    return row[0] if row else None
+# # Função para pegar o caminho do banco de dados
+# def get_saved_path(conn):
+#     cursor = conn.cursor()
+#     cursor.execute ('SELECT caminho FROM configuracoes LIMIT 1')
+#     row = cursor.fetchone()
+#     return row[0] if row else None
 
-# Função para salvar o caminho no banco de dados
-def save_bd_path(conn, caminho):
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO configuracoes (caminho) VALUES (?)', (caminho,))
-    conn.commit()
+# # Função para salvar o caminho no banco de dados
+# def save_bd_path(conn, caminho):
+#     cursor = conn.cursor()
+#     cursor.execute('INSERT INTO configuracoes (caminho) VALUES (?)', (caminho,))
+#     conn.commit()
 
-# Função para criação do banco de dados
-def setup_database(path_sys):
-    #if not get_ini():
-    if len(path_sys) == 2:
-        path_sys = os.path.join(path_sys,'\Robts')
-        caminho_relatorio = os.path.join(path_sys,'\Relatorios')
-    if not os.path.exists(path_sys):
-        os.makedirs(path_sys, exist_ok=True)
-        os.makedirs(caminho_relatorio, exist_ok=True)
+# # Função para criação do banco de dados
+# def setup_database(path_sys):
+#     #if not get_ini():
+#     if len(path_sys) == 2:
+#         path_sys = os.path.join(path_sys,'\Robts')
+#         caminho_relatorio = os.path.join(path_sys,'\Relatorios')
+#     if not os.path.exists(path_sys):
+#         os.makedirs(path_sys, exist_ok=True)
+#         os.makedirs(caminho_relatorio, exist_ok=True)
 
-    db_path = os.path.join(path_sys,'DataBase')
-    os.makedirs(db_path, exist_ok=True)
+#     db_path = os.path.join(path_sys,'DataBase')
+#     os.makedirs(db_path, exist_ok=True)
 
-    db_file = os.path.join(db_path,'robts.db')
-    if not os.path.exists(db_file):
-        conn = sqlite3.connect(db_file)
-        cursor = conn.cursor()
-        cursor.execute('''
-                        CREATE TABLE IF NOT EXISTS configuracoes (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        caminho TEXT NOT NULL
-                    )
-                    ''')
-        # Cria tabelas
-        for i in [script for script in os.listdir(os.getcwd()) if '.txt' and 'table' in script]:
-            with open (i, 'r', encoding='utf8') as f:
-                query = f.read()
-            cursor.execute(query)
-        conn.commit()
+#     db_file = os.path.join(db_path,'robts.db')
+#     if not os.path.exists(db_file):
+#         conn = sqlite3.connect(db_file)
+#         cursor = conn.cursor()
+#         cursor.execute('''
+#                         CREATE TABLE IF NOT EXISTS configuracoes (
+#                         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                         caminho TEXT NOT NULL
+#                     )
+#                     ''')
+#         # Cria tabelas
+#         for i in [script for script in os.listdir(os.getcwd()) if '.txt' and 'table' in script]:
+#             with open (i, 'r', encoding='utf8') as f:
+#                 query = f.read()
+#             cursor.execute(query)
+#         conn.commit()
 
-        ret_save_path = get_saved_path(conn)
-        if not ret_save_path:
-            save_bd_path(conn, path_sys)
-        conn.close()
-        create_ini(path_sys)
+#         ret_save_path = get_saved_path(conn)
+#         if not ret_save_path:
+#             save_bd_path(conn, path_sys)
+#         conn.close()
+#         create_ini(path_sys)
 
 # Função para criar conexão com o banco
 def get_bd_connection():
-    path_ini = get_ini()
-    path_db = os.path.join(path_ini,'DataBase')
-    file_db = os.path.join(path_db,'robts.db')
+    #path_ini = get_ini()
+    #path_db = os.path.join(path_ini,'DataBase')
+    file_db = os.path.join('DataBase/robts.db')
     conn = sqlite3.connect(file_db)
     return conn
 
