@@ -32,12 +32,11 @@ def get_ini():
         return file
 
 # Função para pegar o caminho do banco de dados
-def get_saved_path():
-    conn = get_bd_connection()
+def get_saved_path(conn):
     cursor = conn.cursor()
     cursor.execute ('SELECT caminho FROM configuracoes LIMIT 1')
     row = cursor.fetchone()
-    return row[0] #if row else None
+    return row[0] if row else None
 
 # Função para salvar o caminho no banco de dados
 def save_bd_path(conn, caminho):
@@ -46,41 +45,40 @@ def save_bd_path(conn, caminho):
     conn.commit()
 
 # Função para criação do banco de dados
-def setup_database():
-    if not get_ini():
-        caminho = input("Qual o caminho deseja intalar o Sitema? ").capitalize()   
-        if len(caminho) == 2:
-            caminho = os.path.join(caminho,'\Robts')
-            caminho_relatorio = os.path.join(caminho,'\Relatorios')
-        if not os.path.exists(caminho):
-            os.makedirs(caminho, exist_ok=True)
-            os.makedirs(caminho_relatorio, exist_ok=True)
-    
-        db_path = os.path.join(caminho,'DataBase')
-        os.makedirs(db_path, exist_ok=True)
+def setup_database(path_sys):
+    #if not get_ini():
+    if len(path_sys) == 2:
+        path_sys = os.path.join(path_sys,'\Robts')
+        caminho_relatorio = os.path.join(path_sys,'\Relatorios')
+    if not os.path.exists(path_sys):
+        os.makedirs(path_sys, exist_ok=True)
+        os.makedirs(caminho_relatorio, exist_ok=True)
 
-        db_file = os.path.join(db_path,'robts.db')
-        if not os.path.exists(db_file):
-            conn = sqlite3.connect(db_file)
-            cursor = conn.cursor()
-            cursor.execute('''
-                            CREATE TABLE IF NOT EXISTS configuracoes (
-                           id INTEGER PRIMARY KEY AUTOINCREMENT,
-                           caminho TEXT NOT NULL
-                        )
-                        ''')
-            # Cria tabelas
-            for i in [script for script in os.listdir(os.getcwd()) if '.txt' and 'table' in script]:
-                with open (i, 'r', encoding='utf8') as f:
-                    query = f.read()
-                cursor.execute(query)
-            conn.commit()
+    db_path = os.path.join(path_sys,'DataBase')
+    os.makedirs(db_path, exist_ok=True)
 
-            ret_save_path = get_saved_path(conn)
-            if not ret_save_path:
-                save_bd_path(conn, caminho)
-            conn.close()
-            create_ini(caminho)
+    db_file = os.path.join(db_path,'robts.db')
+    if not os.path.exists(db_file):
+        conn = sqlite3.connect(db_file)
+        cursor = conn.cursor()
+        cursor.execute('''
+                        CREATE TABLE IF NOT EXISTS configuracoes (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        caminho TEXT NOT NULL
+                    )
+                    ''')
+        # Cria tabelas
+        for i in [script for script in os.listdir(os.getcwd()) if '.txt' and 'table' in script]:
+            with open (i, 'r', encoding='utf8') as f:
+                query = f.read()
+            cursor.execute(query)
+        conn.commit()
+
+        ret_save_path = get_saved_path(conn)
+        if not ret_save_path:
+            save_bd_path(conn, path_sys)
+        conn.close()
+        create_ini(path_sys)
 
 # Função para criar conexão com o banco
 def get_bd_connection():

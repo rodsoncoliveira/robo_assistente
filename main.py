@@ -274,81 +274,23 @@ else:
                 else:
                     st.error('As informações de senha não correspondem!')
     else:
+        #col1, col2 = st.columns([3,1])
+        #with col1:
+        sys_path = st.text_input('Informe o caminho para o sistema:')
+        #with col2:
+        #    if st.button('Criar'):
+        #        fc.setup_database()
+        #        st.success('Base criada com Sucesso!')
+        st.text('Registro de Usuário')
         usuario = st.text_input('Usuário')
         senha = st.text_input('Senha', type='password')
         confirmar_senha = st.text_input('Confirmar Senha', type='password')
         if st.button('Registrar'):
             if senha == confirmar_senha:
+                #fc.create_ini()
+                fc.setup_database(sys_path)
                 fc.registrar_usuario(usuario,senha)
-                st.success('Usuário Registrado com Sucesso!!')
+                st.success('Dados Carregados com Sucesso!!')
+                st.rerun()
             else:
                 st.error('As informações de senha não correspondem!')
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # Área de entrada de dados e exibição do grid
-# with col2:
-#     st.header(f'Gerenciamento de {opcao}')
-#     # Formulário para adicionar novos registros
-#     elif opcao == 'Relatórios':
-
-#     elif opcao == 'Usuários':
-#         usr_usuario = st.text_input('Informe o nome do Usuário')
-#         snh_usuario = st.text_input('Informe a Senha.',type='password')
-#         if st.button('Adicionar Usuário'):
-#             if usr_usuario and snh_usuario:
-#                 fc.adicionar_registros('usuarios',(usr_usuario,snh_usuario))
-#                 st.success('Usuário adicionado com sucesso!')
-#                 st.rerun()
-
-#     # Exibir os dados
-#     dados = fc.obter_dados(opcao.lower() + 's')
-
-#     if not dados.empty:
-#         for _, row in dados.iterrows():
-#             col1, col2, col3 = st.columns([3,1,1])
-#             with col1:
-#                 st.write(row.to_dict())
-#             with col2:
-#                 if st.button('Edit', key=f'edit_{row['id']}'):
-#                     novos_valores[]
-#                     for col in dados.columns
-        
-
-# # se o usuário estiver logado, exibe a área de login
-# if 'usuario_logado' in st.session_state:
-#     st.write(f"Seja bem vindo, {st.session_state['usuario_logado']}")
-#     if st.button('Sair'):
-#         del st.session_state['usuario_logado']
-#         st.rerun()
-# else:
-#     menu = st.selectbox('Escolha uma opção:', ['Login','Registrar'])
-#     if menu == 'Login':
-#         usuario = st.text_input('Usuário')
-#         senha = st.text_input('Senha', type='password')
-#         if st.button('Entrar'):
-#             if fc.verificar_login(usuario,senha):
-#                 st.session_state['usuario_logado'] = usuario
-#                 st.rerun()
-#             else:
-#                 st.error('Credenciais Inválidas!!')
-#     elif menu == 'Registrar':
-#         usuario = st.text_input('Usuário')
-#         senha = st.text_input('Senha', type='password')
-#         confirmar_senha = st.text_input('Confirmar Senha', type='password')
-#         if st.button('Registrar'):
-#             if senha == confirmar_senha:
-#                 fc.registrar_usuario(usuario,senha)
-#                 st.success('Usuário Registrado com Sucesso!!')
-#             else:
-#                 st.error('As informações de senha não correspondem!')
