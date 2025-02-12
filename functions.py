@@ -176,7 +176,8 @@ def lista_relatorio():
     return df
 
 # Função para acessar a url
-def get_url(caminho_download):
+def get_url():
+    caminho_download = os.path.join(os.getcwd,'Relatorios')
     # Inicializa o driver do Selenium fora da função
     chrome_options = Options()
     chrome_options.add_argument('--ignore-certificate-errors')
