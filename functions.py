@@ -82,9 +82,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # Função para criar conexão com o banco
 def get_bd_connection():
-    #path_ini = get_ini()
-    #path_db = os.path.join(path_ini,'DataBase')
-    file_db = os.path.join('DataBase/robts.db')
+    path_ini = os.getcwd()
+    path_db = os.path.join(path_ini,'DataBase')
+    file_db = os.path.join(path_db'/robts.db')
     conn = sqlite3.connect(file_db)
     return conn
 
